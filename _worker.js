@@ -1584,15 +1584,11 @@ async function 请求优选API(urls, 默认端口 = '443', 超时时间 = 3000) 
                     const ipIdx = headers.findIndex(h => h.includes('IP'));
                     const delayIdx = headers.findIndex(h => h.includes('延迟'));
                     const speedIdx = headers.findIndex(h => h.includes('下载速度'));
-                    // 额外尝试从表头中识别“国家/地区/城市”列，用于在“CF优选”后面追加国家地区信息
-                    const countryIdx = headers.findIndex(h => h.includes('国家') || h.includes('地区') || h.includes('城市'));
                     const port = new URL(url).searchParams.get('port') || 默认端口;
                     dataLines.forEach(line => {
                         const cols = line.split(',').map(c => c.trim());
                         const wrappedIP = IPV6_PATTERN.test(cols[ipIdx]) ? `[${cols[ipIdx]}]` : cols[ipIdx];
-                        const country = countryIdx !== -1 && cols[countryIdx] ? cols[countryIdx] : '';
-                        const countrySuffix = country ? ` ${country}` : '';
-                        results.add(`${wrappedIP}:${port}#CF优选${countrySuffix} ${cols[delayIdx]}ms ${cols[speedIdx]}MB/s`);
+                        results.add(`${wrappedIP}:${port}#CF优选 ${cols[delayIdx]}ms ${cols[speedIdx]}MB/s`);
                     });
                 }
             }
